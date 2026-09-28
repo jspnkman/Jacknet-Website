@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { Moon, Sun } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Beranda", href: "/" },
@@ -13,7 +14,9 @@ const NAV_ITEMS = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const [indicator, setIndicator] = React.useState<{ left: number; width: number } | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
@@ -25,6 +28,22 @@ export function Navbar() {
 
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(theme);
+    setTheme(theme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("jacknet-theme", newTheme);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(newTheme);
+  };
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const activeIndex = NAV_ITEMS.findIndex(
@@ -42,12 +61,22 @@ export function Navbar() {
   }, [activeIndex]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--card))]/80 backdrop-blur-md supports-[backdrop-filter]:bg-[hsl(var(--card))]/60 transition-colors duration-300">
+    <header
+      className={`sticky top-0 z-50 w-full border-b transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        scrolled
+          ? "bg-[hsl(var(--card))]/75 backdrop-blur-2xl border-[hsl(var(--border))] shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_16px_rgba(0,0,0,0.05)]"
+          : "bg-[hsl(var(--card))]/45 backdrop-blur-xl border-[hsl(var(--border))]/60"
+      }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div
+          className={`flex items-center justify-between transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            scrolled ? "h-14" : "h-16"
+          }`}
+        >
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">
+              <span className="text-xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
                 JACKNET
               </span>
               <span className="text-xs font-medium text-[hsl(var(--muted-foreground))] -ml-0.5">
@@ -74,10 +103,10 @@ export function Navbar() {
                       linkRefs.current[index] = el;
                     }}
                     href={item.href}
-                    className={`relative text-sm transition-colors duration-300 pb-1 ${
+                    className={`relative text-[13px] transition-colors duration-300 pb-1 ${
                       isActive
-                        ? "font-semibold text-[hsl(var(--foreground))]"
-                        : "font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+                        ? "font-medium text-[hsl(var(--foreground))]"
+                        : "font-normal text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
                     }`}
                   >
                     {item.label}
@@ -89,13 +118,29 @@ export function Navbar() {
 
           <div className="flex items-center space-x-4">
             <Button
-              variant="primary"
+              size="sm"
               className="hidden sm:inline-flex"
             >
               <a href="/daftar">Daftar Sekarang</a>
             </Button>
 
-            <button className="md:hidden text-[hsl(var(--foreground))]">
+            {/* Theme Switcher */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--primary))] transition-colors duration-200"
+              aria-label={theme === "dark" ? "Aktifkan light mode" : "Aktifkan dark mode"}
+            >
+              {theme === "dark" ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
+
+            <button
+              className="md:hidden text-[hsl(var(--foreground))]"
+              aria-label="Menu"
+            >
               <svg
                 className="w-6 h-6"
                 fill="none"

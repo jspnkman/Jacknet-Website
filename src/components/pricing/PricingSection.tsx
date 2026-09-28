@@ -8,7 +8,7 @@ import { packagesData } from "@/data/packages";
 
 export function PricingSection() {
   return (
-    <section className="py-24 bg-[hsl(var(--background))] transition-colors duration-300">
+    <section className="relative py-24 bg-[hsl(var(--background))]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           label="Paket Internet"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 interface Node {
@@ -21,6 +21,26 @@ interface Particle {
 export function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const [ping, setPing] = useState(16);
+
+  useEffect(() => {
+    const updatePing = () => {
+      // Berat di 14-17ms, kadang menyelam ke 9ms atau naik ke 19ms
+      const rand = Math.random();
+      let value: number;
+      if (rand < 0.6) {
+        value = 14 + Math.floor(Math.random() * 4); // 14-17
+      } else if (rand < 0.8) {
+        value = 9 + Math.floor(Math.random() * 5); // 9-13
+      } else {
+        value = 18 + Math.floor(Math.random() * 2); // 18-19
+      }
+      setPing(value);
+    };
+    updatePing();
+    const interval = setInterval(updatePing, 1500);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -182,8 +202,8 @@ export function Hero() {
                 <span className="text-[hsl(var(--primary))]">untuk Anda.</span>
               </h1>
               <p className="mt-6 text-lg sm:text-xl text-[hsl(var(--muted-foreground))] max-w-xl leading-relaxed">
-                Koneksi fiber optic stabil untuk kebutuhan sehari-hari. Dari
-                bekerja, belajar, hingga hiburan tanpa batas.
+                Dirancang untuk menemani setiap aktivitas, setiap perangkat,
+                dan setiap momen yang berarti.
               </p>
             </div>
 
@@ -208,21 +228,21 @@ export function Hero() {
                 />
 
                 {/* Floating Info Cards */}
-                <div className="absolute top-6 left-6 bg-[hsl(var(--card))]/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-[hsl(var(--border))] shadow-lg transition-colors duration-300">
+                <div className="absolute top-6 left-6 bg-white/40 dark:bg-white/5 backdrop-blur-md px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)] transition-all duration-300">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full" />
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-[blink_2s_ease-in-out_infinite]" />
                     <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Network Active</span>
                   </div>
                 </div>
 
-                <div className="absolute top-6 right-6 bg-[hsl(var(--card))]/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-[hsl(var(--border))] shadow-lg transition-colors duration-300">
+                <div className="absolute top-6 right-6 bg-white/40 dark:bg-white/5 backdrop-blur-md px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)] transition-all duration-300">
                   <div className="text-xs text-[hsl(var(--muted-foreground))]">Ping</div>
-                  <div className="text-sm font-bold text-[hsl(var(--primary))]">19 ms</div>
+                  <div className="text-sm font-bold text-green-500">{ping} ms</div>
                 </div>
 
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[hsl(var(--card))]/80 backdrop-blur-sm px-6 py-3 rounded-xl border border-[hsl(var(--border))] shadow-lg transition-colors duration-300">
-                  <div className="text-xs text-[hsl(var(--muted-foreground))] text-center">Lintas Jaringan Nusantara Network</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--foreground))]">Terhubung ke infrastruktur fiber kami</div>
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/40 dark:bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-xl border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)] transition-all duration-300 max-w-[280px] text-center">
+                  <div className="text-xs text-[hsl(var(--muted-foreground))]">Lintas Jaringan Nusantara</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--foreground))]">Infrastruktur fiber kami</div>
                 </div>
               </div>
             </div>
@@ -230,13 +250,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 animate-bounce">
-        <svg className="w-5 h-5 text-[hsl(var(--muted-foreground))]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
-        <span className="text-xs text-[hsl(var(--muted-foreground))]">Scroll untuk menjelajah</span>
-      </div>
     </section>
   );
 }

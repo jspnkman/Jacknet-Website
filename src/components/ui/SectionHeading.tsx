@@ -26,7 +26,7 @@ export function SectionHeading({
           {label}
         </span>
       )}
-      <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[hsl(var(--foreground))]">
+      <h2 className="text-3xl sm:text-4xl font-semibold text-[hsl(var(--foreground))]">
         {title}
       </h2>
       {description && (

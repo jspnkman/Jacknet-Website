@@ -96,22 +96,22 @@ export function DarkNetworkSection() {
                   <NetworkCanvas width={400} height={400} nodeCount={35} lineDistance={150} />
                   
                   {/* Floating overlay elements */}
-                  <div className="absolute top-4 left-4 bg-[hsl(var(--card))] backdrop-blur-sm px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
+                  <div className="absolute top-4 left-4 bg-white/5 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)]">
                     <div className="text-xs text-[hsl(var(--muted-foreground))]">Status</div>
                     <div className="text-sm font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-[blink_2s_ease-in-out_infinite]" />
                       Online
                     </div>
                   </div>
 
-                  <div className="absolute top-4 right-4 bg-[hsl(var(--card))] backdrop-blur-sm px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
+                  <div className="absolute top-4 right-4 bg-white/5 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)]">
                     <div className="text-xs text-[hsl(var(--muted-foreground))]">Ping</div>
-                    <div className="text-sm font-bold text-[hsl(var(--primary))]">19 ms</div>
+                    <div className="text-sm font-bold text-green-500">19 ms</div>
                   </div>
 
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[hsl(var(--card))] backdrop-blur-sm px-4 py-2 rounded-lg border border-[hsl(var(--border))]">
-                    <div className="text-xs text-[hsl(var(--muted-foreground))] text-center">Lintas Jaringan Nusantara Network</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--foreground))]">Terhubung ke infrastruktur fiber kami</div>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/5 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.2)]">
+                    <div className="text-xs text-[hsl(var(--muted-foreground))] text-center">Lintas Jaringan Nusantara</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--foreground))] text-center">Infrastruktur fiber kami</div>
                   </div>
                 </div>
               </div>
