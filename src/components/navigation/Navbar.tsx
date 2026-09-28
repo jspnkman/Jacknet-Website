@@ -18,17 +18,38 @@ export function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-
-  useEffect(() => {
+useEffect(() => {
     const savedTheme = localStorage.getItem("jacknet-theme");
-    const theme =
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+
+    // Priority: 1. localStorage (manual override) > 2. System preference
+    const initialTheme =
       savedTheme === "dark" || savedTheme === "light"
         ? (savedTheme as "light" | "dark")
-        : "dark";
+        : mq?.matches
+          ? "dark"
+          : "light";
 
     document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
-    setTheme(theme);
+    document.documentElement.classList.add(initialTheme);
+    setTheme(initialTheme);
+
+    // Listen for system theme changes
+    if (mq) {
+      const handler = () => {
+        // Only follow system if user hasn't manually set a preference
+        const manual = localStorage.getItem("jacknet-theme");
+        if (!manual) {
+          const prefersDark = mq.matches;
+          const newTheme = prefersDark ? "dark" : "light";
+          document.documentElement.classList.remove("light", "dark");
+          document.documentElement.classList.add(newTheme);
+          setTheme(newTheme);
+        }
+      };
+      mq.addEventListener("change", handler);
+      return () => mq.removeEventListener("change", handler);
+    }
   }, []);
 
   const toggleTheme = () => {

@@ -30,9 +30,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                var saved = localStorage.getItem('jacknet-theme');
-                var theme = saved || 'dark';
-                document.documentElement.classList.add(theme);
+                var m = window.matchMedia('(prefers-color-scheme: dark)');
+                document.documentElement.classList.remove('light', 'dark');
+                document.documentElement.classList.add(m.matches ? 'dark' : 'light');
               })();
             `,
           }}
